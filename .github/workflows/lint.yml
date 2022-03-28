@@ -32,9 +32,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+        
+    - name: Restoring Yarn cache
+      uses: actions/cache@v2
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
     - name: Bootstraping packages
-      run: npm install
+      if: steps.yarn-cache.outputs.cache-hit != 'true'
+      run: yarn install
 
     - name: Get file changes
       id: get_file_changes
@@ -71,3 +78,8 @@ jobs:
       with:
           commit_message: Apply formatting changes
 #           branch: ${{ github.head_ref }}
+
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
