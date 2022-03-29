@@ -79,7 +79,24 @@ jobs:
           commit_message: Apply formatting changes
 #           branch: ${{ github.head_ref }}
 
+    - name: Slack Notification
+      uses: 8398a7/action-slack@v3.8.0
+      if: failure()
+      with:
+        status: custom
+        fields: workflow,job,commit,repo,ref,author,took
+        custom_payload: |
+          {
+            username: 'React-Apps-CI',
+            icon_emoji: ':react:',
+            author_name: 'Linting Test',
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `CI Task: ${process.env.AS_WORKFLOW}\ncommit: (${process.env.AS_COMMIT}) ${{ github.event_name }} ${{ job.status }}. Initiated by ${process.env.AS_AUTHOR} in ${process.env.AS_TOOK}`,
+            }]
+          }
+
     env:
-        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-#        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
