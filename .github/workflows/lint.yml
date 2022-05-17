@@ -3,6 +3,11 @@
 name: CI/CD
 
 on:
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Git Ref (Optional)
+        required: false
   push:
     branches: [ dev ]
   pull_request:
