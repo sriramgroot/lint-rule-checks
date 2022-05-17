@@ -3,6 +3,11 @@
 name: CI/CD
 
 on:
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Git Ref (Optional)
+        required: false
   push:
     branches: [ dev ]
   pull_request:
@@ -28,12 +33,12 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+    
+    - name: Running prettier
+      run: npm run format
       
     - name: Running eslint
       run: npm run lint
-      
-    - name: Running prettier
-      run: npm run format
 
 #     - name: Run the tests and generate coverage report
 #       run: npm test -- --coverage
