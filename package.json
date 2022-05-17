@@ -15,19 +15,15 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "style:all": "npm run style:lint && npm run style:prettier",
+    "style:lint": "eslint ./src/*.{js,css}",
+    "style:prettier": "prettier --check ./src/*.{js,css}",
+    "make-pretty": "prettier --write '**/*.{js,css}'",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react/jsx-runtime"
-    ]
   },
   "browserslist": {
     "production": [
