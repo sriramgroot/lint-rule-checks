@@ -1,1 +1,3 @@
+<!-- @format -->
+
 # lint-rule-checks
